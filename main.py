@@ -9,14 +9,17 @@ def printboard():
         print()
 
 
-def placecoin():
+def placecoin():  # return True/False to indicate success in placing the coin
+    # find the first unfilled row/hole in the specified column
     rowin = len(board) - 1
     while board[rowin][colin] != "-":
         rowin -= 1
-    if rowin < 0:
-        print("That column is full.")
-    else:
+        if rowin < 0:
+            return False
+
+    if rowin >= 0:
         board[rowin][colin] = pnum
+        return True
 
 
 def fourinarow():  # checks for 4-in-a-rows on the board
@@ -69,13 +72,19 @@ printboard()
 turnnum = 0
 while fourinarow() is False:
     pnum = str(turnnum % 2 + 1)  # player number
+    if turnnum > 41:  # if the board is full (i.e. there have already been 42 turns)
+        print("It's a draw!")
+        break
+
     colinstr = input("Player " + pnum + ", type the column (1-7) you want to place your coin in: ")
     if colinstr in (str(n) for n in range(1, 8)):  # proceed if the input is a number from 1-7
         colin = int(colinstr) - 1  # the actual integer for the column input
-        placecoin()
-        printboard()
-        if turnnum >= 6 and fourinarow() is True:  # only check for 4-in-a-row if there have been at least 7 turns
-            print("Player " + pnum + " wins!")
-        turnnum += 1
+        if placecoin() is True:  # place the coin; procceed if successful (if the column isn't full)
+            printboard()
+            if turnnum >= 6 and fourinarow() is True:  # only check for 4-in-a-row if there have been at least 7 turns
+                print("Player " + pnum + " wins!")
+            turnnum += 1
+        else:
+            print("That column is full.")
     else:
         print("Make sure it's one number from 1 to 7.")
