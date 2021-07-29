@@ -27,41 +27,20 @@ def fourinarow():  # checks for 4-in-a-rows on the board
     for r in range(len(board)-1, -1, -1):  # 5, 4, 3, 2, 1, 0
         for c in range(COLUMNS):
             if c <= 3:  # coin is in left half of board
-                if checkforhorizline(r, c) or checkforbltrline(r, c):
+                if checkforline(r, c, 0, 1) or checkforline(r, c, -1, 1):  # checks for horiz & bltr line
                     return True
             if c >= 3:  # coin is in right half of board
-                if checkforbrtlline(r, c):
+                if checkforline(r, c, -1, -1):  # checks for brtl line
                     return True
             if r >= 3:  # coin is in bottom half of board
-                if checkforvertline(r, c):
+                if checkforline(r, c, -1, 0):  # checks for vert line
                     return True
     return False
 
 
-def checkforhorizline(r, c):
+def checkforline(r, c, rinc, cinc):  # row increment & column increment
     if board[r][c] != "-":
-        if board[r][c] == board[r][c+1] == board[r][c+2] == board[r][c+3]:
-            return True
-    return False
-
-
-def checkforvertline(r, c):
-    if board[r][c] != "-":
-        if board[r][c] == board[r-1][c] == board[r-2][c] == board[r-3][c]:
-            return True
-    return False
-
-
-def checkforbltrline(r, c):
-    if board[r][c] != "-":
-        if board[r][c] == board[r-1][c+1] == board[r-2][c+2] == board[r-3][c+3]:
-            return True
-    return False
-
-
-def checkforbrtlline(r, c):
-    if board[r][c] != "-":
-        if board[r][c] == board[r-1][c-1] == board[r-2][c-2] == board[r-3][c-3]:
+        if board[r][c] == board[r+rinc][c+cinc] == board[r+2*rinc][c+2*cinc] == board[r+3*rinc][c+3*cinc]:
             return True
     return False
 
